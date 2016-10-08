@@ -50,6 +50,11 @@ func main() {
 			Value: ".",
 			Usage: "Path to watch files from",
 		},
+		cli.StringFlag{
+			Name:  "main-path,mt",
+			Value: ".",
+			Usage: "Absolute path to main",
+		},
 		cli.BoolFlag{
 			Name:  "immediate,i",
 			Usage: "run the server immediately after it's built",
@@ -93,7 +98,7 @@ func MainAction(c *cli.Context) {
 		logger.Fatal(err)
 	}
 
-	builder := gin.NewBuilder(c.GlobalString("path"), c.GlobalString("bin"), c.GlobalBool("godep"))
+	builder := gin.NewBuilder(c.GlobalString("path"), c.GlobalString("bin"), c.GlobalBool("godep"), c.GlobalString("main-path"))
 	runner := gin.NewRunner(filepath.Join(wd, builder.Binary()), c.Args()...)
 	runner.SetWriter(os.Stdout)
 	proxy := gin.NewProxy(builder, runner)
